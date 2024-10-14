@@ -1,9 +1,9 @@
 import './App.css'
-import ChooseRolePage from './pages/choose-role'
+import VerifyEmailPage from './pages/email-verification'
 
 function App() {
   return <>
-  <ChooseRolePage></ChooseRolePage>
+  <VerifyEmailPage></VerifyEmailPage>
   </>
 }
 
