@@ -1,12 +1,10 @@
 import './App.css'
-import { Button } from './components/ui/button'
+import ChooseRolePage from './pages/choose-role'
 
 function App() {
-  return <div className="text-3xl font-bold underline">
-    hello world
-    <div>shadcn button</div>
-    <Button>click me</Button>
-  </div>
+  return <>
+  <ChooseRolePage></ChooseRolePage>
+  </>
 }
 
 export default App
