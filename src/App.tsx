@@ -1,13 +1,10 @@
 import './App.css'
-import Login from './pages/Login-Page'
 import VerifyEmailPage from './pages/email-verification'
+import { LoginForm } from './pages/Login-Page'
 
 function App() {
   return <>
-
-  <Login/>
-
-  
+  <LoginForm/>
   <VerifyEmailPage></VerifyEmailPage>
   </>
 }

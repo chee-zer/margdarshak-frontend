@@ -1,90 +1,129 @@
-import React, { useState } from 'react';
+"use client"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input.tsx"
+import { toast } from "@/components/ui/use-toast"
 
-const Login = () => {
+const phoneRegex = /^\+?[1-9]\d{1,14}$/
 
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const formSchema = z.object({
+  phone: z.string().regex(phoneRegex, "Invalid phone number"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+})
 
-  const handleSubmit = (e:any) => {
-    e.preventDefault()
-    
-    console.log('Phone:', phone);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    setPhone('');
-    setEmail('');
-    setPassword('');
-  };
+export function LoginForm() {
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      phone: "",
+      email: "",
+      password: "",
+    },
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      ),
+    })
+  }
 
   return (
-    <div className="min-h-screen  bg-auth-flow font-inter flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-2 text-left">Login to Margdarshak</h2> 
-        <p className="text-sm text-gray-500 mb-8 text-left">
-          Enter your credentials below to login with your account
-        </p>
-        
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-700">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              id="phone"
-              placeholder="1234567890"
-              value={phone} 
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    <div className="flex h-screen justify-center items-center bg-auth-flow font-inter">
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle className="text-2xl">Login to Margadarshak</CardTitle>
+        <CardDescription>
+          Enter your credentials below to login with your account.
+        </CardDescription>
+      </CardHeader>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardContent className="grid gap-6">
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="+1 (555) 000-0000" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-
-         
-          <div className="relative flex items-center justify-center mb-4">
-            <div className="absolute w-full border-t border-gray-300"></div>
-            <span className="bg-white px-3 text-sm text-gray-500 relative z-10">OR CONTINUE WITH</span>
-          </div>
-
-   
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              placeholder="m@example.com"
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="m@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="**********"
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="********" type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition duration-300"
-          >
-            Login
-          </button>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" className="w-full">
+              Sign in
+            </Button>
+          </CardFooter>
         </form>
-      </div>
+      </Form>
+    </Card>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
