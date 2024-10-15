@@ -1,4 +1,3 @@
-"use client"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -21,14 +20,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input.tsx"
 import { toast } from "@/components/ui/use-toast"
-
-const phoneRegex = /^\+?[1-9]\d{1,14}$/
-
-const formSchema = z.object({
-  phone: z.string().regex(phoneRegex, "Invalid phone number"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-})
+import { formSchema } from "../validation/login";
 
 export function LoginForm() {
   
