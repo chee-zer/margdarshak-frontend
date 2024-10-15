@@ -46,7 +46,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex h-screen justify-center items-center bg-auth-flow font-inter">
+    <div className="flex h-screen justify-center items-center bg-auth-flow bg-cover font-inter">
     <Card className="w-full max-w-sm">
       <CardHeader>
         <CardTitle className="text-2xl">Login to Margadarshak</CardTitle>
